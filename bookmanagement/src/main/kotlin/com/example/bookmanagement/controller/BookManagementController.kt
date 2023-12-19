@@ -29,4 +29,10 @@ class BookManagementController(private val bookManagementService: BookManagement
     fun createBooks(@RequestBody book: Book): ResponseEntity<Any> {
         return bookManagementService.createBook(book)
     }
+
+    // 書籍情報更新API
+    @PutMapping("/books/{bookId}")
+    fun updateBook(@PathVariable bookId: Long, @RequestBody book: Book): ResponseEntity<Any> {
+        return bookManagementService.updateBook(bookId, book)
+    }
 }

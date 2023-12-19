@@ -65,5 +65,43 @@ class BookManagementService(private val dsl: DSLContext) {
         return ResponseEntity.ok(book)
     }
 
+    fun updateBook(bookId: Long, book: Book): ResponseEntity<Any> {
+        // 書籍IDの存在チェック
+        val bookExists = (dsl.selectCount()
+                .from("Books")
+                .where(field("book_id", Long::class.java).eq(bookId))
+                .fetchOne(0, Int::class.java) ?: 0) > 0
+
+        if (!bookExists) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("errorCode" to "notfound"))
+        }
+
+        // タイトルが空でないかチェック
+        if (book.title.isBlank()) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(mapOf("errorCode" to "notaddeptable", "message" to "Title is required"))
+        }
+        // 著者IDがAuthorsテーブルに存在するかチェック
+        val authorExists = (dsl.selectCount()
+                .from("Authors")
+                .where(field("AUTHOR_ID", Long::class.java).eq(book.authorId))
+                .fetchOne()?.value1() ?: 0) > 0
+
+        if (!authorExists) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("error" to "Author not found"))
+        }
+
+        val updatedRows = dsl.update(table("Books"))
+                .set(field("TITLE", String::class.java), book.title)
+                .set(field("AUTHOR_ID", Long::class.java), book.authorId)
+                .where(field("BOOK_ID", Long::class.java).eq(bookId))
+                .execute()
+
+        return if (updatedRows > 0) {
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.internalServerError().body(mapOf("error" to "Failed to update book"))
+        }
+    }
+
 }
 
