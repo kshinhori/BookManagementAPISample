@@ -1,6 +1,7 @@
 package com.example.bookmanagement.service
 
 import com.example.bookmanagement.dto.BookAuthorDto
+import com.example.bookmanagement.model.Author
 import com.example.bookmanagement.model.Book
 import org.springframework.stereotype.Service
 import org.jooq.DSLContext
@@ -100,6 +101,25 @@ class BookManagementService(private val dsl: DSLContext) {
             ResponseEntity.ok().build()
         } else {
             ResponseEntity.internalServerError().body(mapOf("error" to "Failed to update book"))
+        }
+    }
+
+    fun createAuthor(author: Author): ResponseEntity<Any> {
+        // 名前が空でないかチェック
+        if (author.name.isBlank()) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(mapOf("errorCode" to "notacceptable", "message" to "Name is required"))
+        }
+
+        val authorId = dsl.insertInto(table("Authors"))
+                .set(field("NAME", String::class.java), author.name)
+                .returning(field("AUTHOR_ID"))
+                .fetchOne()
+                ?.getValue(field("AUTHOR_ID", Long::class.java))
+
+        return if (authorId != null) {
+            ResponseEntity.ok().body(mapOf("authorId" to authorId))
+        } else {
+            ResponseEntity.internalServerError().body(mapOf("error" to "Failed to create author"))
         }
     }
 

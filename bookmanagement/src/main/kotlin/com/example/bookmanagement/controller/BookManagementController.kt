@@ -1,5 +1,6 @@
 package com.example.bookmanagement.controller
 
+import com.example.bookmanagement.model.Author
 import com.example.bookmanagement.model.Book
 import com.example.bookmanagement.service.BookManagementService
 import org.springframework.http.HttpStatus
@@ -34,5 +35,11 @@ class BookManagementController(private val bookManagementService: BookManagement
     @PutMapping("/books/{bookId}")
     fun updateBook(@PathVariable bookId: Long, @RequestBody book: Book): ResponseEntity<Any> {
         return bookManagementService.updateBook(bookId, book)
+    }
+
+    // 著者情報登録API
+    @PostMapping("/authors")
+    fun createAuthor(@RequestBody author: Author): ResponseEntity<Any> {
+        return bookManagementService.createAuthor(author)
     }
 }
