@@ -42,4 +42,10 @@ class BookManagementController(private val bookManagementService: BookManagement
     fun createAuthor(@RequestBody author: Author): ResponseEntity<Any> {
         return bookManagementService.createAuthor(author)
     }
+
+    // 著者情報更新API
+    @PutMapping("/authors/{authorId}")
+    fun updateAuthor(@PathVariable authorId: Long, @RequestBody author: Author): ResponseEntity<Any> {
+        return bookManagementService.updateAuthor(authorId, author)
+    }
 }

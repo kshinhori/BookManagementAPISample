@@ -123,5 +123,33 @@ class BookManagementService(private val dsl: DSLContext) {
         }
     }
 
+    fun updateAuthor(authorId: Long, author: Author): ResponseEntity<Any> {
+        // 著者名が空でないかチェック
+        if (author.name.isBlank()) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(mapOf("errorCode" to "notacceptable", "message" to "Name is required"))
+        }
+
+        // 著者IDの存在チェック
+        val authorExists = (dsl.selectCount()
+                .from("Authors")
+                .where(field("AUTHOR_ID", Long::class.java).eq(authorId))
+                .fetchOne(0, Int::class.java) ?: 0) > 0
+
+        if (!authorExists) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("errorCode" to "notfound"))
+        }
+
+        val updatedRows = dsl.update(table("Authors"))
+                .set(field("NAME", String::class.java), author.name)
+                .where(field("AUTHOR_ID", Long::class.java).eq(authorId))
+                .execute()
+
+        return if (updatedRows > 0) {
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.internalServerError().body(mapOf("error" to "Failed to update author"))
+        }
+    }
+
 }
 

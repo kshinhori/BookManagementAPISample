@@ -189,4 +189,49 @@ class BookmanagementApplicationTests {
 				.content(newBookJson))
 				.andExpect(MockMvcResultMatchers.status().isNotAcceptable)
 	}
+
+	@Test
+	fun testUpdateAuthor_Success() {
+		// 著者情報更新が成功するケース
+		val newBookJson = """
+            {
+                "name": "New Author"                
+            }
+        """.trimIndent()
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/bookmanagement/authors/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(newBookJson))
+				.andExpect(MockMvcResultMatchers.status().isOk)
+	}
+
+	@Test
+	fun testUpdateAuthor_NotAcceptable() {
+		// 著者情報更新が失敗するケース(nameが空)
+		val newBookJson = """
+            {
+                "name": ""                
+            }
+        """.trimIndent()
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/bookmanagement/authors/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(newBookJson))
+				.andExpect(MockMvcResultMatchers.status().isNotAcceptable)
+	}
+
+	@Test
+	fun testUpdateAuthor_NotFound() {
+		// 著者情報更新が失敗するケース(存在しない著者)
+		val newBookJson = """
+            {
+                "name": "New Author"                
+            }
+        """.trimIndent()
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/bookmanagement/authors/0")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(newBookJson))
+				.andExpect(MockMvcResultMatchers.status().isNotFound)
+	}
 }
