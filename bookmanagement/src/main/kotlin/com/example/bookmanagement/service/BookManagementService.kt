@@ -7,6 +7,7 @@ import org.jooq.DSLContext
 import org.jooq.impl.DSL
 import org.jooq.impl.DSL.field
 import org.jooq.impl.DSL.table
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 @Service
@@ -49,7 +50,7 @@ class BookManagementService(private val dsl: DSLContext) {
                 .fetchOne()?.value1() ?: 0) > 0
 
         if (!authorExists) {
-            return ResponseEntity.badRequest().body(mapOf("error" to "Author not found"))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("error" to "Author not found"))
         }
 
         // 書籍の登録処理
