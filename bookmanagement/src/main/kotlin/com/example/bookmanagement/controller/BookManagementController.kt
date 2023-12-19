@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 class BookManagementController(private val bookManagementService: BookManagementService) {
 
     // タイトル・著者名に基づく書籍情報検索(タイトル・著者名未指定の場合は全件取得)
-    @GetMapping("/search/books")
+    @GetMapping("/books")
     fun searchBooks(
             @RequestParam(required = false) title: String?,
             @RequestParam(required = false) authorName: String?

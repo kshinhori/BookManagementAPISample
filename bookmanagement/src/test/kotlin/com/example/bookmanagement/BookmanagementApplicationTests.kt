@@ -24,42 +24,42 @@ class BookmanagementApplicationTests {
 	@Test
 	fun testSearchBookByTitle_Success() {
 		// タイトルによる書籍の検索が成功するケース
-		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/search/books?title=The Tale of Peter Rabbit"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/books?title=The Tale of Peter Rabbit"))
 				.andExpect(MockMvcResultMatchers.status().isOk)
 	}
 
 	@Test
 	fun testSearchBookByAuthorName_Success() {
 		// 著者名による書籍の検索が成功するケース
-		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/search/books?authorName=Beatrix Potter"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/books?authorName=Beatrix Potter"))
 				.andExpect(MockMvcResultMatchers.status().isOk)
 	}
 
 	@Test
 	fun testSearchBookByTitleAndAuthorName_Success() {
 		// タイトル・著者名による書籍の検索が成功するケース
-		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/search/books?title=The Tale of Peter Rabbit&authorName=Beatrix Potter"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/books?title=The Tale of Peter Rabbit&authorName=Beatrix Potter"))
 				.andExpect(MockMvcResultMatchers.status().isOk)
 	}
 
 	@Test
 	fun testSearchBookWithoutTitleAndAuthorName_Success() {
 		// タイトル・著者名なしで書籍の検索が成功するケース
-		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/search/books"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/books"))
 				.andExpect(MockMvcResultMatchers.status().isOk)
 	}
 
 	@Test
 	fun testSearchBookByTitle_NotFound() {
 		// タイトルによる書籍の検索が失敗するケース
-		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/search/books?title=Not Found Test"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/books?title=Not Found Test"))
 				.andExpect(MockMvcResultMatchers.status().isNotFound)
 	}
 
 	@Test
 	fun testSearchBookByAuthorName_NotFound() {
 		// タイトルによる書籍の検索が失敗するケース
-		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/search/books?authorName=Not Found Test"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/books?authorName=Not Found Test"))
 				.andExpect(MockMvcResultMatchers.status().isNotFound)
 	}
 
