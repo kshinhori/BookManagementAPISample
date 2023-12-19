@@ -13,8 +13,7 @@ import org.springframework.http.ResponseEntity
 
 @Service
 class BookManagementService(private val dsl: DSLContext) {
-
-    fun searchBooks(title: String?, authorName: String?): List<BookAuthorDto> {
+    fun searchBooks(title: String?, authorName: String?): ResponseEntity<Any> {
         var condition = DSL.noCondition()
         if (!title.isNullOrEmpty()) {
             condition = condition.and(field("Books.title", String::class.java).eq(title))
@@ -29,14 +28,21 @@ class BookManagementService(private val dsl: DSLContext) {
                 .where(condition)
                 .fetch()
 
-        return records.map {
+        val books = records.map {
             BookAuthorDto(
                     bookId = it.get(field("BOOK_ID", Long::class.java)),
                     title = it.get(field("TITLE", String::class.java)),
                     authorName = it.get(field("NAME", String::class.java))
             )
         }
+
+        return if (books.isNotEmpty()) {
+            ResponseEntity.ok(books)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("errorCode" to "notfound"))
+        }
     }
+
 
     fun createBook(book: Book): ResponseEntity<Any> {
         // タイトルと著者IDのバリデーション

@@ -17,12 +17,7 @@ class BookManagementController(private val bookManagementService: BookManagement
             @RequestParam(required = false) title: String?,
             @RequestParam(required = false) authorName: String?
     ): ResponseEntity<Any> {
-        val books = bookManagementService.searchBooks(title, authorName)
-        return if (books.isNotEmpty()) {
-            ResponseEntity.ok(books)
-        } else {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("errorCode" to "notfound"))
-        }
+        return bookManagementService.searchBooks(title, authorName)
     }
 
     // 書籍情報登録API
