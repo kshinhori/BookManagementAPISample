@@ -1,6 +1,5 @@
 package com.example.bookmanagement.controller
 
-import com.example.bookmanagement.dto.BookAuthorDto
 import com.example.bookmanagement.model.Book
 import com.example.bookmanagement.service.BookManagementService
 import org.springframework.http.HttpStatus
@@ -25,4 +24,8 @@ class BookManagementController(private val bookManagementService: BookManagement
         }
     }
 
+    @PostMapping("/create/books")
+    fun createBook(@RequestBody book: Book): ResponseEntity<Any> {
+        return bookManagementService.createBook(book)
+    }
 }

@@ -13,6 +13,6 @@ class Book(
 
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "author_id")
-        var author: Long
+        var authorId: Long
 
 )
