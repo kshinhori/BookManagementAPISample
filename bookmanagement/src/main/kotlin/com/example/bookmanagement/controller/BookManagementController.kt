@@ -32,6 +32,12 @@ class BookManagementController(private val bookManagementService: BookManagement
         return bookManagementService.updateBook(bookId, book)
     }
 
+    // 著者情報取得API
+    @GetMapping("/authors/{authorId}")
+    fun getAuthorById(@PathVariable authorId: Long): ResponseEntity<Any> {
+        return bookManagementService.getAuthorById(authorId)
+    }
+
     // 著者情報登録API
     @PostMapping("/authors")
     fun createAuthor(@RequestBody author: Author): ResponseEntity<Any> {

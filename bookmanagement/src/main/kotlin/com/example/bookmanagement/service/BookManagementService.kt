@@ -110,6 +110,23 @@ class BookManagementService(private val dsl: DSLContext) {
         }
     }
 
+    fun getAuthorById(authorId: Long): ResponseEntity<Any> {
+        val record = dsl.select()
+                .from("Authors")
+                .where(field("AUTHOR_ID", Long::class.java).eq(authorId))
+                .fetchOne()
+
+        return if (record != null) {
+            val author = Author(
+                    authorId = record.get(field("AUTHOR_ID", Long::class.java)),
+                    name = record.get(field("NAME", String::class.java))
+            )
+            ResponseEntity.ok(author)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(mapOf("errorCode" to "notfound"))
+        }
+    }
+
     fun createAuthor(author: Author): ResponseEntity<Any> {
         // 名前が空でないかチェック
         if (author.name.isBlank()) {

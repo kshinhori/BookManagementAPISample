@@ -161,6 +161,13 @@ class BookmanagementApplicationTests {
 	}
 
 	@Test
+	fun testGetAuthor_Success() {
+		// 著者情報取得が成功するケース
+		mockMvc.perform(MockMvcRequestBuilders.get("/bookmanagement/authors/1"))
+				.andExpect(MockMvcResultMatchers.status().isOk)
+	}
+
+	@Test
 	fun testCreateAuthor_Success() {
 		// 著者情報登録が成功するケース
 		val newBookJson = """
