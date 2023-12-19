@@ -24,8 +24,9 @@ class BookManagementController(private val bookManagementService: BookManagement
         }
     }
 
-    @PostMapping("/create/books")
-    fun createBook(@RequestBody book: Book): ResponseEntity<Any> {
+    // 書籍情報登録API
+    @PostMapping("/books")
+    fun createBooks(@RequestBody book: Book): ResponseEntity<Any> {
         return bookManagementService.createBook(book)
     }
 }
